@@ -19,11 +19,13 @@ RUN mkdir db ; \
     mkdir binaries ; \
     mkdir startup    
 COPY overpass.conf /etc/httpd/conf.d/
+COPY startup.sh /overpass/startup/
 COPY --from=builder /overpass/osm-3s_v0.7.59/ ./
 COPY --from=builder /overpass/db/ ./db/
 COPY --from=builder /overpass/binaries/ ./binaries/
-RUN nohup /overpass/binaries/bin/dispatcher --osm-base --db-dir=/overpass/db/ &
+RUN chmod 755 -R /overpass/ ; \
+    chmod a+x /overpass/startup/startup.sh
    
 EXPOSE 80
+CMD /overpass/startup/startup.sh
 
-CMD /usr/libexec/s2i/run
