@@ -16,11 +16,12 @@ FROM registry.access.redhat.com/ubi9/php-80
 USER root
 WORKDIR /overpass/
 RUN mkdir db ; \
-    mkdir binaries ; \
-COPY overpass.conf /etc/httpd/conf/
+    mkdir binaries
+COPY overpass.conf /etc/httpd/conf.d/
 COPY --from=builder /overpass/osm-3s_v0.7.59/ ./
 COPY --from=builder /overpass/db/ ./db/
 COPY --from=builder /overpass/binaries/ ./binaries/
+RUN nohup /overpass/binaries/bin/dispatcher --osm-base --db-dir=/overpass/db/ &
    
 EXPOSE 80
 
