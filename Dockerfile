@@ -1,4 +1,5 @@
-FROM registry.redhat.io/ubi9/php-80 AS builder
+FROM registry.access.redhat.com/ubi9/php-80 AS builder
+USER root
 WORKDIR /overpass/
 RUN dnf install -y g++ make expat expat-devel zlib-devel wget tar ; \
     wget https://dev.overpass-api.de/releases/osm-3s_latest.tar.gz ; \
@@ -9,7 +10,8 @@ RUN dnf install -y g++ make expat expat-devel zlib-devel wget tar ; \
     wget https://download.geofabrik.de/europe/monaco-latest.osm.bz2 ; \
     nohup bin/init_osm3s.sh monaco-latest.osm.bz2 $DB_DIR $EXEC_DIR &
     
-FROM registry.redhat.io/ubi9/php-80
+FROM registry.access.redhat.com/ubi9/php-80
+USER root
 WORKDIR /overpass/
 COPY overpass.conf /etc/httpd/conf/
 COPY --from=builder /overpass/osm-3s_v0.7.59/ ./
