@@ -27,5 +27,6 @@ RUN chmod 755 -R /overpass/ ; \
     chmod a+x /overpass/startup/startup.sh
    
 EXPOSE 80
+USER root
 CMD /overpass/startup/startup.sh
 
